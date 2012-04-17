@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>StuffJS Demo</title>
+	</head>
+	<body>
+		<div class="foo">
+			<a href="">I'm a link</a>
+			<button>I'm a button</button>
+		</div>
+
+		<script type="text/javascript" src="events.js"></script>
+		<script type="text/javascript" src="exemplar.js"></script>
+		<script style="display: block; white-space: pre; font-family: courier;">
+		var Ev = new Emitter();
+
+		var Foo = Exemplar({
+			constructor: function(options) {
+				this.el = options && options.el;
+				Emitter.call(this, this.events);
+			},
+			foo: function() {
+				console.log('foo called with', arguments);
+			},
+			events: {
+				foo: 'foo',
+				'el.click button': 'buttonClick'
+			},
+			buttonClick: function() {
+				console.log('button clicked with arguments', arguments);
+			}
+		});
+
+		var Bar = Foo.extend({
+			events: {
+				bar: 'bar'
+			},
+			bar: function() {
+				console.log('bar called with', arguments);
+			}
+		});
+
+		var foo = new Foo({ el: document.querySelector('.foo') });
+		foo.on('el.click a', function(ev) {
+			console.log('link clicked with arguments', arguments);
+			ev.preventDefault();
+			ev.stopPropagation();
+		});
+
+		var bar = new Bar();
+
+		Ev.on('global-event', function() {
+			console.log('global event called with', arguments);
+		});
+		Ev.on('call-foo', foo.foo);
+
+		foo.trigger('foo', 'arg1', 'arg2');
+		bar.trigger('bar', 'A man walked into a bar');
+		Ev.trigger('global-event', 'foo', 'bar', 'baz');
+		Ev.trigger('call-foo', 'foo', 'bar', 'baz');
+
+		Ev.body = document.body;
+		Ev.on('body.click', function() {
+			console.log('body clicked with arguments', arguments);
+		});
+		Ev.foo = foo;
+		Ev.trigger('foo.foo', 'foo triggered from Ev');
+		</script>
+	</body>
+</html>
