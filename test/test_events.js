@@ -64,6 +64,34 @@ test('on and trigger', function() {
 	stop();
 });
 
+test('off all', function() {
+	Emitter.call(foo);
+	foo.on('foo', foo.foo);
+
+	expect(1, 'only 1 event triggers');
+	foo.trigger('foo', 'foo', function(a) {
+		strictEqual(a, 'foo', 'foo.foo was called');
+		foo.off('foo');
+		foo.trigger('foo', 'foo', function(a) {
+			ok(false, 'foo should no longer trigger');
+		});
+		setTimeout(start, 50);
+	});
+
+	stop();
+});
+
+test('off named function', function() {
+	Emitter.call(foo);
+	var fn = foo.on('foo', foo.foo);
+	foo.on('foo', function() {
+		ok('This handler should still be called');
+		start();
+	});
+	foo.off('foo', fn);
+	stop();
+});
+
 test('multiple calls', function() {
 	Emitter.call(foo);
 	expect(2, 'foo.foo should be called twice');
