@@ -1,14 +1,14 @@
 StuffJS
 =======
 
-Some stuff, written in JavaScript. Includes 2 libraries that do as little as possible whilst trying to remain useful. The libraries are currently:
+A small collection of micro-libraries that can be used on their own or together. Each library is totally independent and has no dependencies. Currently includes:
   - exemplar.js - provides sugar for declaring function exemplars (i.e. making use of the function + prototype pattern), inheriting and copying properties across.
   - events.js - provides an event emitter/pub-sub library that supports DOM and non-DOM events and supports rudimentary namespacing.
+  - attr.js - provides two functions: attr.get and attr.set that allow easy access to attributes nested inside object without having to check if each sub-attribute exists.
 
-Both libraries try hard to not impose on your own code and work well on their own, or together.
 
 Exemplar
-====
+========
 
 	var Foo = Exemplar({
 		constructor: function() {
@@ -41,7 +41,7 @@ Events
 
 	var emitter = new Emitter();
 
-	emitter.on('foo', function(arg1, arg2));
+	emitter.on('foo', function(arg1, arg2) {});
 	emitter.trigger('foo', arg1, arg2);
 
 
@@ -71,3 +71,32 @@ Events
 	emitter.sub = new Emitter();
 	emitter.on('el.click input[type="text"]', function() {});
 	emitter.on('sub.foo-bar', function() {});
+
+
+	var emitter = new Emitter();
+	var fn = emitter.on('foo', function(arg1, arg2) {});
+	emitter.off('foo', fn);
+
+
+Attr
+====
+
+	var foo = {
+		bar: {
+			baz: {
+				biz: [
+					'qux'
+				]
+			}
+		}
+	};
+
+	attr.get(foo, 'bar');
+	attr.get(foo, ['bar', 'baz', 'biz', 0]);
+	attr.get(foo, 'bar.baz.biz.0');
+	attr.get(foo, ['bar', 'baz', 'quux'], 'default');
+	attr.get(foo, 'bar.baz.quux', 'default');
+
+	attr.set(foo, 'newattr', 'newval');
+	attr.set(foo, ['createnewattr', 'subattr'], 'newval');
+	attr.set(foo, 'bix.boz', 'foobar');
