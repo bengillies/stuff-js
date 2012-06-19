@@ -89,6 +89,9 @@ test('off named function', function() {
 		start();
 	});
 	foo.off('foo', fn);
+	foo.trigger('foo', function() {
+		ok(false, 'This callback should not run');
+	});
 	stop();
 });
 
