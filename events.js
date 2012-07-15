@@ -10,9 +10,22 @@
 	 * Run the given function asynchronously. This ensures that all events are
 	 * asynchronous, rather than a mixture of both, which can get confusing.
 	 */
-	function makeAsync(fn) {
-		window.setTimeout(fn, 1);
-	}
+	var makeAsync = ('postMessage' in window) ? function(fn) {
+		var secret = Math.random(),
+			origin = window.location.origin ||
+				window.location.protocol + '//' + window.location.host ||
+				'*';
+		function _callback(ev) {
+			if (ev.data === secret) {
+				window.removeEventListener('message', _callback);
+				fn();
+			}
+		}
+		window.addEventListener('message', _callback);
+		window.postMessage(secret, origin);
+	} : function(fn) {
+		window.setTimeout(fn, 0);
+	};
 
 	function Emitter(eventsObject) {
 		var self = (this === global || typeof this === 'undefined') ? {} : this,
