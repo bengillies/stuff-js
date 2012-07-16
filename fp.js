@@ -36,9 +36,9 @@
 		if (!fns.length) { throw new TypeError('function expected'); }
 		return function() {
 			var self = this;
-			fns.reduce(function(res, fn) {
+			return fns.reduce(function(res, fn) {
 				return [fn.apply(self, res)];
-			}, arguments);
+			}, arguments)[0];
 		};
 	}
 

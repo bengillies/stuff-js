@@ -109,6 +109,14 @@ test('compose passes this arg on to each function', function() {
 	fn.call(thisArg);
 });
 
+test('compose returns the correct result', function() {
+	function foo(a) {
+		return a + 4;
+	}
+	var result = fp.compose(foo, foo, foo, foo)(0);
+	strictEqual(result, 16, 'the composition returns 16');
+});
+
 test('nextTick expects a function as an argument', function() {
 	raises(fp.nextTick, TypeError, 'nextTick expects at least one argument');
 	raises(function() { fp.nextTick(1); }, TypeError,
