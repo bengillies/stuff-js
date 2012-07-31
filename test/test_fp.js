@@ -117,6 +117,18 @@ test('compose returns the correct result', function() {
 	strictEqual(result, 16, 'the composition returns 16');
 });
 
+test('compose composes in the right order', function() {
+	function foo(a) {
+		return 'foo(' + a + ')';
+	}
+	function bar(b) {
+		return 'bar(' + b + ')';
+	}
+	var result = fp.compose(foo, bar)(0);
+	strictEqual(result, 'foo(bar(0))',
+		'the right most function is called first');
+});
+
 test('nextTick expects a function as an argument', function() {
 	raises(fp.nextTick, TypeError, 'nextTick expects at least one argument');
 	raises(function() { fp.nextTick(1); }, TypeError,

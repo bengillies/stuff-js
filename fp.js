@@ -36,8 +36,8 @@
 		if (!fns.length) { throw new TypeError('function expected'); }
 		return function() {
 			var args = arguments,
-				i, l;
-			for (i = 0, l = fns.length; i < l; i++) {
+				i = fns.length;
+			while (--i >= 0) {
 				args = [fns[i].apply(this, args)];
 			}
 			return args[0];
