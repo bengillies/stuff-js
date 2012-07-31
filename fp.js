@@ -32,13 +32,15 @@
 	}
 
 	function compose() {
-		var fns = [].slice.call(arguments).filter(assertFunction);
+		var fns = [].filter.call(arguments, assertFunction);
 		if (!fns.length) { throw new TypeError('function expected'); }
 		return function() {
-			var self = this;
-			return fns.reduce(function(res, fn) {
-				return [fn.apply(self, res)];
-			}, arguments)[0];
+			var args = arguments,
+				i, l;
+			for (i = 0, l = fns.length; i < l; i++) {
+				args = [fns[i].apply(this, args)];
+			}
+			return args[0];
 		};
 	}
 
