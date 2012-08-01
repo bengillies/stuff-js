@@ -10,6 +10,8 @@
 	 * update the target with obj (defaults to target.textContent)
 	 * when an attribute in obj changes, update the target
 	 * mappings are given by hashMap in the format:
+	 *     attr
+	 *     // === obj[attr] --> target
 	 *     {
 	 *         attr: selector
 	 *     }
@@ -22,19 +24,25 @@
 	 *     // (el and prop are optional)
 	 */
 	function bind(obj, target, hashMap) {
-		var attr;
+		var attr, setter;
 		target = target || document;
 
-		for (attr in hashMap) if (hashMap.hasOwnProperty(attr)) {
-			(function() {
-				var opts = (typeof hashMap[attr] === 'string') ?
-						{ el: hashMap[attr] } : hashMap[attr],
-					els = (opts.el) ?
-						target.querySelectorAll(opts.el) : [target],
-					setter = setValue(els, opts.prop);
-				setter(obj[attr]);
-				setSetter(obj, attr, setter);
-			}());
+		if (typeof hashMap === 'string') {
+			setter = setValue(target, 'text');
+			setter(obj[hashMap]);
+			setSetter(obj, hashMap, setter);
+		} else {
+			for (attr in hashMap) if (hashMap.hasOwnProperty(attr)) {
+				(function() {
+					var opts = (typeof hashMap[attr] === 'string') ?
+							{ el: hashMap[attr] } : hashMap[attr],
+						els = (opts.el) ?
+							target.querySelectorAll(opts.el) : [target],
+						setter = setValue(els, opts.prop);
+					setter(obj[attr]);
+					setSetter(obj, attr, setter);
+				}());
+			}
 		}
 	}
 
