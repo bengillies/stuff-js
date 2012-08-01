@@ -52,7 +52,7 @@
 	 */
 	function getPropName(el, prop) {
 		if (el[prop]) {
-			return el[prop];
+			return prop;
 		} else {
 			switch (prop) {
 				case 'class': return 'className';
