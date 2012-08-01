@@ -24,7 +24,7 @@
 	 *     // (el and prop are optional)
 	 */
 	function bind(obj, target, hashMap) {
-		var attr, setter;
+		var setter;
 		target = target || document;
 
 		if (typeof hashMap === 'string') {
@@ -32,17 +32,15 @@
 			setter(obj[hashMap]);
 			setSetter(obj, hashMap, setter);
 		} else {
-			for (attr in hashMap) if (hashMap.hasOwnProperty(attr)) {
-				(function() {
-					var opts = (typeof hashMap[attr] === 'string') ?
-							{ el: hashMap[attr] } : hashMap[attr],
-						els = (opts.el) ?
-							target.querySelectorAll(opts.el) : [target],
-						setter = setValue(els, opts.prop);
-					setter(obj[attr]);
-					setSetter(obj, attr, setter);
-				}());
-			}
+			Object.keys(hashMap).forEach(function(attr) {
+				var opts = (typeof hashMap[attr] === 'string') ?
+						{ el: hashMap[attr] } : hashMap[attr],
+					els = (opts.el) ?
+						target.querySelectorAll(opts.el) : [target],
+					setter = setValue(els, opts.prop);
+				setter(obj[attr]);
+				setSetter(obj, attr, setter);
+			});
 		}
 	}
 
@@ -56,7 +54,7 @@
 		} else {
 			switch (prop) {
 				case 'class': return 'className';
-				case undefined:
+				case undefined: return 'textContent';
 				case 'text': return 'textContent';
 				default: return 'setAttribute';
 			}
@@ -92,7 +90,8 @@
 		delete descriptor.writable;
 		delete descriptor.value;
 		descriptor.set = setter;
-		descriptor.get = function() { return descriptorValue; }
+		descriptor.get = function() { return descriptorValue; };
+
 		Object.defineProperty(obj, attr, descriptor);
 
 		function setter(value) {
