@@ -10,7 +10,8 @@
 	 * Run the given function asynchronously. This ensures that all events are
 	 * asynchronous, rather than a mixture of both, which can get confusing.
 	 */
-	var makeAsync = ('postMessage' in window) ? function(fn) {
+	var makeAsync = ('postMessage' in window &&
+			window.location.protocol !== 'file:') ? function(fn) {
 		var secret = Math.random(),
 			origin = window.location.origin ||
 				window.location.protocol + '//' + window.location.host ||
