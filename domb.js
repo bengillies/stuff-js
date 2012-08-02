@@ -28,7 +28,7 @@
 		target = target || document;
 
 		if (typeof hashMap === 'string') {
-			setter = setValue(target, 'text');
+			setter = setValue([target], 'text');
 			setter(obj[hashMap]);
 			setSetter(obj, hashMap, setter);
 		} else {
