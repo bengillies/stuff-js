@@ -45,7 +45,7 @@
 	}
 
 	var nextTick = (window && window.location && window.location.origin &&
-			!/^file:\/\//.test(window.location.origin)) ?
+			!/^file:\/\//.test(window.location.origin) && window.postMessage) ?
 		function(fn) {
 			var secret = Math.random();
 			assertFunction(fn);
