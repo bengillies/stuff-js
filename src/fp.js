@@ -69,7 +69,7 @@
 		var timer;
 		return function() {
 			var self = this,
-				args = [].slice.call(arguments);
+				args = arguments;
 			if (timer) {
 				clearTimeout(timer);
 				timer = null;
@@ -85,7 +85,7 @@
 		var timer;
 		return function() {
 			var self = this,
-				args = [].slice.call(arguments);
+				args = arguments;
 			if (!timer) {
 				timer = setTimeout(function() {
 					fn.apply(self, args);
