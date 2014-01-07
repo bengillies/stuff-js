@@ -1,0 +1,13 @@
+{
+  "name": "bengillies/stuff-js",
+  "version": "0.0.1",
+  "main": ["src/attr.js", "src/domb.js", "src/events.js", "src/exemplar.js", "src/fp.js"],
+  "description": "A disparate collection of helpful utility libraries",
+  "license": "BSD",
+  "ignore": [
+    "Makefile",
+    "*.html",
+    "*.md",
+    "test"
+  ]
+}
